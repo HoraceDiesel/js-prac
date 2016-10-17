@@ -1,49 +1,52 @@
 //no global variables, all in module
 // (function(){
-	var people = {
-		people: ['Horace', 'Lamb'],
-		init: function(){
-			this.cacheDOM();
-			this.action();
-			this.render();
-		},
-		cacheDOM: function(){
-			this.$el = $('#peopleModule');
-			this.$input = this.$el.find('input');
-			this.$button = this.$el.find('button');
-			this.$ul = this.$el.find('ul');
-			this.$p = this.$el.find('p');
-			this.template = this.$el.find('#people-template').html();
-		},
-		action: function(){
-			this.$button.on('click', this.addPerson.bind(this));
-			this.$ul.on('click', 'i.del', this.deletePerson.bind(this));
-		},
-		render: function(){
+	var people = (function(){
+
+		var people = ['Horace', 'Lamb'];
+
+		var $el = $('#peopleModule');
+		var $input = $el.find('input');
+		var $button = $el.find('button');
+		var $ul = $el.find('ul');
+		var $p = $el.find('p');
+		var template = $el.find('#people-template').html();
+
+		//event binding
+		$button.on('click', addPerson);
+		$ul.on('click', 'i.del', deletePerson);
+
+		_render();
+
+		function _render(){
 			let data = {
-				people: this.people
+				people: people
 			};
-			this.$ul.html(Mustache.render(this.template, data));
-		},
-		addPerson: function(){
-			if(this.$input.val()!= '') {
-				this.people.push(this.$input.val());
-				this.$input.val('');
-				this.$p.html('');
-				this.render();
+			$ul.html(Mustache.render(template, data));
+		};
+
+		function addPerson(){
+			if($input.val()!= '') {
+				people.push($input.val());
+				$input.val('');
+				$p.html('');
+				_render();
 			} else {
-				this.$p.html('Enter your name');
+				$p.html('Enter your name');
 			}
-		},
-		deletePerson: function(event){
+		};
+
+		function deletePerson(event){
 			$remove = (event.target).closest('li');
-			$index = this.$ul.find('li').index($remove);
-			this.people.splice($index, 1);
+			$index = $ul.find('li').index($remove);
+			people.splice($index, 1);
 			$remove.remove();
 			console.log($index);
-		}
-	};
+		};
 
-	people.init();
-	
+		return {
+			// addPerson: addPerson,
+			// deletePerson: deletePerson
+		};
+
+	})();
 // })();
