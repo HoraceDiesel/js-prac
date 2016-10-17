@@ -32,6 +32,7 @@
 				_render();
 			} else {
 				$p.html('Enter your name');
+				console.log(people);
 			}
 		};
 
